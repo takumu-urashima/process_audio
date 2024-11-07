@@ -138,7 +138,14 @@ def get_summary(transcript_text):
         response_body = json.loads(response['body'].read().decode('utf-8'))
         completion_text = response_body['content'][0]['text']
         logger.info(f"Bedrockからのレスポンス: {completion_text}")
-        completion_json = json.loads(completion_text)
+        # JSON部分を抽出
+        json_start = completion_text.find('{')
+        json_end = completion_text.rfind('}') + 1
+        json_text = completion_text[json_start:json_end]
+        
+        # JSONをパース
+        completion_json = json.loads(json_text)
+        logger.info(f"Bedrockからのレスポンス: {completion_json}")
     
         return completion_json
     
